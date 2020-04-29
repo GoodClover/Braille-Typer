@@ -23,9 +23,14 @@ def clear_bit(value, n):
 colOff = (255, 255, 255)
 colOn  = (100, 100, 100)
 
+# Braille starts at 0x2800 for a space and you add 8 bits representing the dots.
+#  1  4
+#  2  5
+#  3  6
+#  7  8
 offset = 0x2800
 current = 0x00
-char = "N"
+char = "⠀" # This is a braille space.
 text = ""
 
 dispModes = [
