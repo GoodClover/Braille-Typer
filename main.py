@@ -68,7 +68,7 @@ positionShortText8 = {
     6:  "BL", 7: "BR"
 }
 
-with open("brailleTypes.json", "r") as file:
+with open("brailleTypes.json", "r", encoding="utf8") as file:
     brailleTypes = json.loads(file.read())
 brailleType = "English Braille"
 
@@ -98,6 +98,7 @@ def setDot(n, v):
         current = clear_bit(current, n)
         buttons[n].bg = colOff
     updateChar()
+    updateDispMode()
 
 def toggle68(to=None):
     if to == None:
@@ -112,6 +113,8 @@ def typeIt(c=None):
     global text
     if c == None:
         c = char
+        for i in range(8):
+            setDot(i, False)
     text += c
     outputText.value = text
 
@@ -128,11 +131,22 @@ def textChanged():
             c = outputText.value[i]
             if ord(c) & 0xFF00 == 0x2800:
                 text += chr(ord(c) & 0xFFFF)
-            elif c.lower() in brailleTypes[brailleType]:
-                text += brailleTypes[brailleType][c.lower()]
+            elif c.lower() in brailleTypes[brailleType]["characters"]:
+                text += brailleTypes[brailleType]["characters"][c.lower()]
             elif c in ["\n"]:
                 text += c
-        outputText.value = text
+        outputText.value = contractText(text)
+
+def contractText(text):
+    return text
+    # I have no idea how to do this.
+    # buildup = ""
+    # newtext = ""
+    # for char in text:
+    #     buildup += char
+    #     if:
+    #         newtext += buildup
+    # return newtext
 
 def changeDispMode(n=None):
     global dispMode
@@ -282,8 +296,8 @@ buttons = {
         visible=False
     )
 }
-for button in buttons:
-    button.bg = colOff
+for i in buttons:
+    buttons[i].bg = colOff
 
 buttonTypeIt = PushButton(app,
     command=typeIt,
