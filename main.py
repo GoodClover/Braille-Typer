@@ -7,6 +7,7 @@
 ##### Imports #####
 from guizero import App, PushButton, Text, TextBox, Combo
 import json
+import keyboard
 
 # I 'borrowed' this code so it's going here
 def get_bit(value, n):
@@ -117,6 +118,10 @@ def typeIt(c=None):
             setDot(i, False)
     text += c
     outputText.value = text
+
+def typeExt():
+    keyboard.wait("space", suppress=True)
+    keyboard.write(text)
 
 def backspace():
     global text
@@ -305,6 +310,12 @@ buttonTypeIt = PushButton(app,
     grid=[2,1],
     width=otherButtonWidth, height=otherButtonHeight
 )
+buttonTypeExt = PushButton(app,
+    command=typeExt,
+    text="Type Externally\n(Hit space in\n destination window)",
+    grid=[3,1],
+    width=otherButtonWidth, height=otherButtonHeight
+)
 buttonBackspace = PushButton(app,
     command=backspace,
     text="Backspace",
@@ -323,7 +334,6 @@ buttonToggle68 = PushButton(app,
     grid=[2,4],
     width=otherButtonWidth, height=otherButtonHeight
 )
-
 ##### The Final Little Bit #####
 updateChar()
 app.display()
